@@ -2,4 +2,3 @@ data/
 *.pt
 lightning_logs
 *.csv
-.env
