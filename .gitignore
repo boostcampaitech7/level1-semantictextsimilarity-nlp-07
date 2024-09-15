@@ -2,3 +2,7 @@ data/
 *.pt
 lightning_logs
 *.csv
+.DS_Store
+*.lock
+*.toml
+EDA*
