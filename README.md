@@ -24,7 +24,41 @@
 ## 프로젝트 아키텍쳐
 
 ## 프로젝트 폴더 구조
-
+📦level1-semantictextsimilarity-nlp-07
+ ┣ 📂docs
+ ┃ ┗ 📂image
+ ┃ ┃ ┗ 📂README
+ ┃ ┃ ┃ ┗ 📜1726648039867.png
+ ┣ 📂logger
+ ┃ ┗ 📜__init__.py
+ ┣ 📂saved
+ ┃ ┗ 📜log
+ ┣ 📂src
+ ┃ ┣ 📂callback
+ ┃ ┃ ┣ 📜early_stopping.py
+ ┃ ┃ ┣ 📜epoch_print_callback.py
+ ┃ ┃ ┣ 📜learning_rate_monitor.py
+ ┃ ┃ ┣ 📜model_checkpoint.py
+ ┃ ┃ ┗ 📜__init__.py
+ ┃ ┣ 📂config
+ ┃ ┃ ┣ 📜data_loader_config.py
+ ┃ ┃ ┗ 📜path_config.py
+ ┃ ┣ 📂data_loader
+ ┃ ┃ ┣ 📜dataset.py
+ ┃ ┃ ┗ 📜loader.py
+ ┃ ┣ 📂model
+ ┃ ┃ ┗ 📜model.py
+ ┃ ┣ 📂preprocessing
+ ┃ ┃ ┗ 📜preprocessor.py
+ ┃ ┣ 📂tokenizing
+ ┃ ┃ ┗ 📜tokenizing.py
+ ┃ ┗ 📂trainer
+ ┃ ┃ ┗ 📜predict.py
+ ┣ 📜main.py
+ ┣ 📜README.md
+ ┣ 📜requirements.txt
+ ┣ 📜test.py
+ ┗ 📜train.py
 ## Appendix
 
 ### 협업방식
