@@ -10,7 +10,7 @@ from typing import Callable
 class LossFunctions:
     mse_loss: Callable = torch.nn.MSELoss()  # object id 값만 저장
     l1_loss: Callable = torch.nn.L1Loss()
-    Hu_loss: Callable = torch.nn.HuberLoss()
+    hu_loss: Callable = torch.nn.HuberLoss()
     
 @dataclass
 class Models:
