@@ -4,5 +4,8 @@ lightning_logs
 *.csv
 .env
 result*
-
+checkpoint*
+*nsmc*
+*petition*
+*slack*
 *.pyc
