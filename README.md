@@ -1,6 +1,6 @@
 # NLP Mini Project
 
-![1726648039867](/docs/image/README/1726648039867.png)
+![1726648039867](./docs/image/README/1726648039867.png)
 
 ## 📕프로젝트 개요
 
@@ -17,51 +17,54 @@
 
 | 강감찬 | 이채호 | 오승범 | 이서현 | 유채은 | 서재덕 |
 | :-: | :-: | :-: | :-: | :-: | :-: |
-|||||||
+|||![꼬부기2](./docs/image/README/꼬부기2.png)||||
 |[@감찬](https://github.com/gsgh3016)|[@채호](https://github.com/chell9999)|[@승범](https://github.com/Sbeom12)|[@서현](https://github.com/seohyeon0677)|[@채은](https://github.com/canolayoo78)|[@재덕](https://github.com/jduck301)|
-|고독한 음악인|혼자있는 지방|사랑스러운 승범|서현 막내|야구가 싫은 채은|재덕=? 오리|
+|고독한 음악인|혼자있는 지방러|게임이 하고 싶은 승범|서현 막내|야구가 싫은 채은|재덕=? 오리|
 
 ## 프로젝트 아키텍쳐
 
 ## 프로젝트 폴더 구조
-📦level1-semantictextsimilarity-nlp-07
- ┣ 📂docs
- ┃ ┗ 📂image
- ┃ ┃ ┗ 📂README
- ┃ ┃ ┃ ┗ 📜1726648039867.png
- ┣ 📂logger
- ┃ ┗ 📜__init__.py
- ┣ 📂saved
- ┃ ┗ 📜log
- ┣ 📂src
- ┃ ┣ 📂callback
- ┃ ┃ ┣ 📜early_stopping.py
- ┃ ┃ ┣ 📜epoch_print_callback.py
- ┃ ┃ ┣ 📜learning_rate_monitor.py
- ┃ ┃ ┣ 📜model_checkpoint.py
- ┃ ┃ ┗ 📜__init__.py
- ┃ ┣ 📂config
- ┃ ┃ ┣ 📜data_loader_config.py
- ┃ ┃ ┗ 📜path_config.py
- ┃ ┣ 📂data_loader
- ┃ ┃ ┣ 📜dataset.py
- ┃ ┃ ┗ 📜loader.py
- ┃ ┣ 📂model
- ┃ ┃ ┗ 📜model.py
- ┃ ┣ 📂preprocessing
- ┃ ┃ ┗ 📜preprocessor.py
- ┃ ┣ 📂tokenizing
- ┃ ┃ ┗ 📜tokenizing.py
- ┃ ┗ 📂trainer
- ┃ ┃ ┗ 📜predict.py
- ┣ 📜main.py
- ┣ 📜README.md
- ┣ 📜requirements.txt
- ┣ 📜test.py
- ┗ 📜train.py
+📦level1-semantictextsimilarity-nlp-07  
+ ┣ 📂docs  
+ ┃ ┗ 📂image  
+ ┃ ┃ ┗ 📂README  
+ ┃ ┃ ┃ ┗ 📜1726648039867.png  
+ ┣ 📂logger  
+ ┃ ┗ 📜__init__.py  
+ ┣ 📂saved  
+ ┃ ┗ 📜log  
+ ┣ 📂src  
+ ┃ ┣ 📂callback  
+ ┃ ┃ ┣ 📜early_stopping.py  
+ ┃ ┃ ┣ 📜epoch_print_callback.py  
+ ┃ ┃ ┣ 📜learning_rate_monitor.py  
+ ┃ ┃ ┣ 📜model_checkpoint.py  
+ ┃ ┃ ┗ 📜__init__.py  
+ ┃ ┣ 📂config  
+ ┃ ┃ ┣ 📜data_loader_config.py  
+ ┃ ┃ ┗ 📜path_config.py  
+ ┃ ┣ 📂data_loader  
+ ┃ ┃ ┣ 📜dataset.py  
+ ┃ ┃ ┗ 📜loader.py  
+ ┃ ┣ 📂model  
+ ┃ ┃ ┗ 📜model.py  
+ ┃ ┣ 📂preprocessing  
+ ┃ ┃ ┗ 📜preprocessor.py  
+ ┃ ┣ 📂tokenizing  
+ ┃ ┃ ┗ 📜tokenizing.py  
+ ┃ ┗ 📂trainer  
+ ┃ ┃ ┗ 📜predict.py  
+ ┣ 📜main.py  
+ ┣ 📜README.md  
+ ┣ 📜requirements.txt  
+ ┣ 📜test.py  
+ ┗ 📜train.py  
+
 ## Appendix
 
 ### 협업방식
+
 * Notion
 * Git  
 
+### 
