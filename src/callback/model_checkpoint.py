@@ -2,7 +2,7 @@ from pytorch_lightning.callbacks import ModelCheckpoint
 class ModelCheckpoint(ModelCheckpoint):
     def __init__(
         self,
-        monitor='val_pearson',
+        monitor='val_loss',
         mode='max',
         save_top_k=1,
         save_last=False,
