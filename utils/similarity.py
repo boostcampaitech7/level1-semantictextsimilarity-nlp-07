@@ -15,8 +15,18 @@ def tfidf_vectorize(sentences):
     vectorizer = TfidfVectorizer(tokenizer=tokenize, token_pattern=None)
     return vectorizer.fit_transform(sentences)
 
+def convert_tuple_to_string(sentence):
+    """Tuple을 공백으로 연결된 문자열로 변환"""
+    if isinstance(sentence, tuple):
+        sentence = " ".join(sentence)
+    return sentence
+
 def lsa_similarity(sentence1, sentence2):
     """LSA(잠재 의미 분석)를 통해 두 문장의 유사도를 구함"""
+    # tuple을 문자열로 변환
+    sentence1 = convert_tuple_to_string(sentence1)
+    sentence2 = convert_tuple_to_string(sentence2)
+    
     sentences = [sentence1, sentence2]
     tfidf_matrix = tfidf_vectorize(sentences)
     
@@ -28,6 +38,10 @@ def lsa_similarity(sentence1, sentence2):
 
 def jaccard_similarity(sentence1, sentence2):
     """Jaccard 유사도를 계산"""
+    # tuple을 문자열로 변환
+    sentence1 = convert_tuple_to_string(sentence1)
+    sentence2 = convert_tuple_to_string(sentence2)
+    
     tokens1 = set(tokenize(sentence1))
     tokens2 = set(tokenize(sentence2))
     
@@ -38,7 +52,14 @@ def jaccard_similarity(sentence1, sentence2):
 
 def fuzzy_similarity(sentence1, sentence2):
     """Fuzzy 유사도를 계산"""
+    # tuple을 문자열로 변환
+    sentence1 = convert_tuple_to_string(sentence1)
+    sentence2 = convert_tuple_to_string(sentence2)
+    
     return fuzz.ratio(sentence1, sentence2)
+
+def normalize_similarity(lsa, jaccard, fuzzy):
+    return lsa, jaccard, fuzzy / 100
 
 # 테스트용
 if __name__ == "__main__":

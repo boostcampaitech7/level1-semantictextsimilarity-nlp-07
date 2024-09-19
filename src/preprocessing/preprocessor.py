@@ -8,11 +8,13 @@ def preprocessing(data, model_name):
         targets = data['label'].values.tolist()
     except:
         targets = []
-
+        
+    sentence1 = data['sentence_1'].tolist()
+    sentence2 = data['sentence_2'].tolist()
     # 텍스트 데이터를 전처리합니다.
     inputs = tokenizing(data, model_name)
 
-    return inputs, targets
+    return inputs, targets, sentence1, sentence2
 
 def augmentation(data):
     augmented_data = data.copy()
