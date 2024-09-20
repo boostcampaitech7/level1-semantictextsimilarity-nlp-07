@@ -4,7 +4,14 @@ import torch
 import torchmetrics
 from dataclasses import dataclass, asdict
 from typing import Callable
-from utils.similarity import *
+# from utils.similarity import *
+from src.config.data_loader_config import *
+import pandas as pd
+
+
+INPUT_IDS_INDEX = TRAIN_INPUT_FEATURES.index('input_ids')
+ATTENTION_MASK_INDEX = TRAIN_INPUT_FEATURES.index('attention_mask')
+LABEL_INDEX = TRAIN_INPUT_FEATURES.index('label')
 
 
 @dataclass
@@ -42,9 +49,9 @@ class PlmObject:
 
 
 class Model(pl.LightningModule):
-    def __init__(self, model_name, lr, loss_func):
+    def __init__(self, model_name: str, lr: int, loss_func: Callable):
         super().__init__()
-        self.save_hyperparameters()
+        self.save_hyperparameters(ignore=['loss_func'])
 
         self.model_name = model_name
         self.lr = lr
@@ -56,64 +63,47 @@ class Model(pl.LightningModule):
         # Loss 계산을 위해 사용할 Loss func 사용
         self.loss_func = loss_func
         assert self.loss_func is not None
-
-        # 유사도 피처를 처리할 추가 레이어
-        self.similarity_layer = torch.nn.Linear(3, 1)
         
-    def forward(self, x, sentence1, sentence2, attention_mask=None):
-        # 문장간 유사도 계산 (lsa, jaccard, fuzzy)
-        lsa = lsa_similarity(sentence1, sentence2)
-        jaccard = jaccard_similarity(sentence1, sentence2)
-        fuzzy = fuzzy_similarity(sentence1, sentence2)
-
-        # 유사도 정규화
-        lsa, jaccard, fuzzy = normalize_similarity(lsa, jaccard, fuzzy)
-
-        # 유사도 피처를 하나로 합침
-        similarity_features = torch.tensor([lsa, jaccard, fuzzy], device=x.device).unsqueeze(0).float()
-        
-        # PLM을 통해 원래의 예측값 계산
-        logits = self.plm(input_ids=x, attention_mask=attention_mask)['logits']
-        
-        # 유사도 피처를 추가 처리하고 최종 출력에 합침
-        similarity_logits = self.similarity_layer(similarity_features)
-        logits += similarity_logits
-
+    def forward(self, input_data, attention_mask):
+        logits = self.plm(input_ids=input_data, attention_mask=attention_mask)['logits']
         return logits
 
     def training_step(self, batch, batch_idx):
-        # 배치 데이터를 리스트의 인덱스로 접근
-        x, y, sentence1, sentence2 = batch[0], batch[1], batch[2], batch[3]
-        logits = self(x, sentence1, sentence2).squeeze()
-        loss = self.loss_func(logits, y.float())
+        input_ids = batch[INPUT_IDS_INDEX]
+        attention_mask = batch[ATTENTION_MASK_INDEX]
+        label = batch[LABEL_INDEX]
+        
+        outputs: torch.Tensor = self(input_ids, attention_mask)
+        loss: torch.Tensor = self.loss_func(outputs, label)
         self.log("train_loss", loss)
-
         return loss
 
     def validation_step(self, batch, batch_idx):
-        # 배치 데이터를 리스트의 인덱스로 접근
-        x, y, sentence1, sentence2 = batch[0], batch[1], batch[2], batch[3]
-        logits = self(x, sentence1, sentence2)
-        loss = self.loss_func(logits, y.float())
-        val_pearson = torchmetrics.functional.pearson_corrcoef(logits.squeeze(), y.squeeze())
+        input_ids = batch[INPUT_IDS_INDEX]
+        attention_mask = batch[ATTENTION_MASK_INDEX]
+        label = batch[LABEL_INDEX]
+        
+        outputs: torch.Tensor = self(input_ids, attention_mask)
+        loss: torch.Tensor = self.loss_func(outputs, label)
+        val_pearson: torch.Tensor = torchmetrics.functional.pearson_corrcoef(outputs.squeeze(), label.squeeze())
         self.log("val_loss", loss)
         self.log("val_pearson", val_pearson)
-
         return loss
 
     def test_step(self, batch, batch_idx):
-        # 배치 데이터를 리스트의 인덱스로 접근
-        x, y, sentence1, sentence2 = batch[0], batch[1], batch[2], batch[3]
-        logits = self(x, sentence1, sentence2)
-
-        self.log("test_pearson", torchmetrics.functional.pearson_corrcoef(logits.squeeze(), y.squeeze()))
+        input_ids = batch[INPUT_IDS_INDEX]
+        attention_mask = batch[ATTENTION_MASK_INDEX]
+        label = batch[LABEL_INDEX]
+        
+        outputs: torch.Tensor = self(input_ids, attention_mask)
+        self.log("test_pearson", torchmetrics.functional.pearson_corrcoef(outputs.squeeze(), label.squeeze()))
 
     def predict_step(self, batch, batch_idx):
-        # 배치 데이터를 리스트의 인덱스로 접근
-        x, sentence1, sentence2 = batch[0], batch[1], batch[2]
-        logits = self(x, sentence1, sentence2)
-
-        return logits.squeeze()
+        input_ids = batch[INPUT_IDS_INDEX]
+        attention_mask = batch[ATTENTION_MASK_INDEX]
+        
+        outputs: torch.Tensor = self(input_ids, attention_mask)
+        return outputs
 
     def configure_optimizers(self):
         optimizer = torch.optim.AdamW(self.parameters(), lr=self.lr)

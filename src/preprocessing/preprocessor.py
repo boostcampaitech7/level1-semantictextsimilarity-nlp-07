@@ -1,22 +1,24 @@
-from src.tokenizing.tokenizing import tokenizing
 import pandas as pd
-def preprocessing(data, model_name):
+from transformers import AutoTokenizer
+
+
+def preprocessing(data: pd.DataFrame, model_name: str) -> pd.DataFrame:
     # 안쓰는 컬럼을 삭제합니다.
     data = data.drop(columns=['id'])
-    # 타겟 데이터가 없으면 빈 배열을 리턴합니다.
-    try:
-        targets = data['label'].values.tolist()
-    except:
-        targets = []
+    tokenizer = AutoTokenizer.from_pretrained(model_name)
+    
+    tokenized_output = data.apply(
+        lambda row: tokenizer(row['sentence_1'], row['sentence_2'],
+                              add_special_tokens=True, padding='max_length', 
+                              truncation=True, max_length=128), axis=1
+    )
+    
+    data['input_ids'] = tokenized_output.apply(lambda x: x['input_ids'])
+    data['attention_mask'] = tokenized_output.apply(lambda x: x['attention_mask'])
         
-    sentence1 = data['sentence_1'].tolist()
-    sentence2 = data['sentence_2'].tolist()
-    # 텍스트 데이터를 전처리합니다.
-    inputs = tokenizing(data, model_name)
+    return data
 
-    return inputs, targets, sentence1, sentence2
-
-def augmentation(data):
+def augmentation(data: pd.DataFrame):
     augmented_data = data.copy()
     non_zero_labels = augmented_data[augmented_data['label'] != 0]
     non_zero_labels[['sentence_1', 'sentence_2']] = non_zero_labels[['sentence_2', 'sentence_1']]

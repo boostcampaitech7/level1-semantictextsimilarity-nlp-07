@@ -1,7 +1,8 @@
 from src.data_loader.dataset import Dataset
 from src.preprocessing.preprocessor import preprocessing, augmentation
 from src.config.path_config import TRAIN_PATH,TEST_PATH,DEV_PATH,PREDICT_PATH
-import torch
+from src.config.data_loader_config import TRAIN_INPUT_FEATURES, TEST_INPUT_FEATURES
+from torch.utils.data import DataLoader
 import pandas as pd
 import pytorch_lightning as pl
 
@@ -11,7 +12,7 @@ class Dataloader(pl.LightningDataModule):
         super().__init__()
         self.batch_size = batch_size
         self.shuffle = shuffle
-        self.num_workers = num_workers  # num_workers 추가
+        self.num_workers = num_workers
 
         self.train_path = TRAIN_PATH
         self.dev_path = DEV_PATH
@@ -24,7 +25,7 @@ class Dataloader(pl.LightningDataModule):
         self.test_dataset = None
         self.predict_dataset = None
 
-    def setup(self, stage=None):
+    def setup(self, stage: str=None):
         if stage == 'fit' or stage is None:
             # 학습 데이터와 검증 데이터셋을 호출합니다
             train_data = pd.read_csv(self.train_path)
@@ -34,38 +35,38 @@ class Dataloader(pl.LightningDataModule):
                train_data = augmentation(train_data)
 
             # 학습 데이터 전처리 및 준비
-            train_inputs, train_targets, train_sentence1, train_sentence2 = preprocessing(train_data, self.model_name)
-            val_inputs, val_targets, val_sentence1, val_sentence2 = preprocessing(val_data, self.model_name)
+            train_data: pd.DataFrame = preprocessing(train_data, self.model_name)
+            val_data: pd.DataFrame = preprocessing(val_data, self.model_name)
 
-            self.train_dataset = Dataset(train_inputs, train_targets, train_sentence1, train_sentence2)
-            self.val_dataset = Dataset(val_inputs, val_targets, val_sentence1, val_sentence2)
+            self.train_dataset: Dataset = Dataset(train_data[TRAIN_INPUT_FEATURES])
+            self.val_dataset: Dataset = Dataset(val_data[TRAIN_INPUT_FEATURES])
 
-        if stage == 'test' or stage is None:
+        if stage == 'test':
             # 테스트 데이터 준비
             test_data = pd.read_csv(self.test_path)
-            test_inputs, test_targets, test_sentence1, test_sentence2 = preprocessing(test_data, self.model_name)
-            self.test_dataset = Dataset(test_inputs, test_targets, test_sentence1, test_sentence2)
+            test_data: pd.DataFrame = preprocessing(test_data, self.model_name)
+            self.test_dataset: Dataset = Dataset(test_data[TRAIN_INPUT_FEATURES])
 
             predict_data = pd.read_csv(self.predict_path)
-            predict_inputs, _, predict_sentence1, predict_sentence2 = preprocessing(predict_data, self.model_name)
-            self.predict_dataset = Dataset(predict_inputs, [], predict_sentence1, predict_sentence2)
+            predict_data: pd.DataFrame = preprocessing(predict_data, self.model_name)
+            self.predict_dataset: Dataset = Dataset(predict_data[TEST_INPUT_FEATURES], is_predict=True)
     
     def train_dataloader(self):
-        return torch.utils.data.DataLoader(
+        return DataLoader(
             self.train_dataset, batch_size=self.batch_size, shuffle=self.shuffle, num_workers=self.num_workers
         )
 
     def val_dataloader(self):
-        return torch.utils.data.DataLoader(
+        return DataLoader(
             self.val_dataset, batch_size=self.batch_size, num_workers=self.num_workers
         )
 
     def test_dataloader(self):
-        return torch.utils.data.DataLoader(
+        return DataLoader(
             self.test_dataset, batch_size=self.batch_size, num_workers=self.num_workers
         )
 
     def predict_dataloader(self):
-        return torch.utils.data.DataLoader(
+        return DataLoader(
             self.predict_dataset, batch_size=self.batch_size, num_workers=self.num_workers
         )

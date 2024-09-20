@@ -12,4 +12,8 @@ DATA_LOADER_CONFIG = {
 OPTIMIZER_CONFIG = {
   "learning_rate": 1e-5,
   "max_epoch": 50
-  }
+}
+
+TRAIN_INPUT_FEATURES = ['input_ids', 'attention_mask', 'label']
+
+TEST_INPUT_FEATURES = ['input_ids', 'attention_mask']
