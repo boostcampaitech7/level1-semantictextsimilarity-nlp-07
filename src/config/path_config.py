@@ -9,3 +9,6 @@ DEV_PATH = Path(BASE, DATA_LOADER_CONFIG['dev_path'])
 TEST_PATH = Path(BASE, DATA_LOADER_CONFIG['test_path'])
 PREDICT_PATH = Path(BASE, DATA_LOADER_CONFIG['predict_path'])
 OUTPUT_PATH = Path(BASE, DATA_LOADER_CONFIG['output_path'])
+
+ENSEMBLE_TRAIN = Path(BASE, 'results', 'train')
+ENSEMBLE_OUTPUT = Path(BASE, 'results', 'output')
