@@ -27,6 +27,8 @@ class Models:
     roberta_base: str = "klue/roberta-base"
     roberta_small: str = "klue/roberta-small"
     roberta_large: str = "klue/roberta-large"
+    t5_base: str = "sentence-transformers/sentence-t5-base"
+    t5_gtr_base : str = "sentence-transformers/gtr-t5-base"
 
     def __init__(self, model_name):
         self._model_name = model_name
