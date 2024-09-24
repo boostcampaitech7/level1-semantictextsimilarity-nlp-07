@@ -14,4 +14,4 @@ def save_result(data, model_name, max_epoch, filename=None):
     else:
         output_filename = f'output_base_{max_epoch}_{model_name}_mse.csv'
     SAVE_PATH = Path(BASE, output_filename)
-    output.to_csv(output_filename, index=False)
+    output.to_csv(SAVE_PATH, index=False)
