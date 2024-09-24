@@ -3,7 +3,7 @@ class ModelCheckpoint(ModelCheckpoint):
     def __init__(
         self,
         monitor='val_loss',
-        mode='max',
+        mode='min',
         save_top_k=1,
         save_last=False,
         model_name = None,
