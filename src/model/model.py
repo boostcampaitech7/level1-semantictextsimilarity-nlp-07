@@ -2,7 +2,7 @@ import pytorch_lightning as pl
 import transformers
 import torch
 import torchmetrics
-from dataclasses import dataclass, asdict
+from dataclasses import dataclass
 from typing import Callable
 # from utils.similarity import *
 from src.config.data_loader_config import *
@@ -22,26 +22,25 @@ class LossFunctions:
     
 @dataclass
 class Models:
-    electra_base: str = "snunlp/KR-ELECTRA-discriminator"
-    electra_base_v3: str = "monologg/koelectra-base-v3-discriminator"
-    roberta_base: str = "klue/roberta-base"
-    roberta_small: str = "klue/roberta-small"
-    roberta_large: str = "klue/roberta-large"
-    t5_base: str = "sentence-transformers/sentence-t5-base"
-    t5_gtr_base : str = "sentence-transformers/gtr-t5-base"
+    model_dict = {'electra_base': "snunlp/KR-ELECTRA-discriminator",
+    'electra_base_v3': "monologg/koelectra-base-v3-discriminator",
+    'roberta_base': "klue/roberta-base",
+    'roberta_small': "klue/roberta-small",
+    'roberta_large': "klue/roberta-large",
+    'synatra7b': "maywell/Synatra-7B-v0.3-dpo",
+    'saltlux': "saltlux/Ko-Llama3-Luxia-8B"}
 
     def __init__(self, model_name):
         self._model_name = model_name
-        assert self._model_name in asdict(self).values()
     
     @property
     def plm(self):
         return transformers.AutoModelForSequenceClassification.from_pretrained(
-            pretrained_model_name_or_path=self._model_name, num_labels=1)
+            pretrained_model_name_or_path=self._model_name, torch_dtype='auto', num_labels=1)
 
     def get_model_name(self, name):
         if not hasattr(self, name):
-            raise ValueError(f"'{name}' is not a valid model name in Models class \n select Model -> {', '.join(list(asdict(self).keys()))}")
+            raise ValueError(f"'{name}' is not a valid model name in Models class \n select Model -> {', '.join(list(self.model_dict.keys()))}")
         return getattr(self, name)
 
 
