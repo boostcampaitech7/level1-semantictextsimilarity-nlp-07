@@ -24,6 +24,7 @@ class Dataloader(pl.LightningDataModule):
         self.val_dataset = None
         self.test_dataset = None
         self.predict_dataset = None
+        self.collate_fn = None
 
     def setup(self, stage: str=None):
         if stage == 'fit' or stage is None:
@@ -53,20 +54,20 @@ class Dataloader(pl.LightningDataModule):
     
     def train_dataloader(self):
         return DataLoader(
-            self.train_dataset, batch_size=self.batch_size, shuffle=self.shuffle, num_workers=self.num_workers
+            self.train_dataset, batch_size=self.batch_size, shuffle=self.shuffle, num_workers=self.num_workers, collate_fn=self.collate_fn
         )
 
     def val_dataloader(self):
         return DataLoader(
-            self.val_dataset, batch_size=self.batch_size, num_workers=self.num_workers
+            self.val_dataset, batch_size=self.batch_size, num_workers=self.num_workers, collate_fn=self.collate_fn
         )
 
     def test_dataloader(self):
         return DataLoader(
-            self.test_dataset, batch_size=self.batch_size, num_workers=self.num_workers
+            self.test_dataset, batch_size=self.batch_size, num_workers=self.num_workers, collate_fn=self.collate_fn
         )
 
     def predict_dataloader(self):
         return DataLoader(
-            self.predict_dataset, batch_size=self.batch_size, num_workers=self.num_workers
+            self.predict_dataset, batch_size=self.batch_size, num_workers=self.num_workers, collate_fn=self.collate_fn
         )
