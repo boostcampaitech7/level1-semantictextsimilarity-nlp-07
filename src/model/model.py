@@ -28,8 +28,9 @@ class Models:
     roberta_small: str = "klue/roberta-small"
     roberta_large: str = "klue/roberta-large"
     t5_base: str = "sentence-transformers/sentence-t5-base"
-    t5_gtr_base : str = "sentence-transformers/gtr-t5-base"
-    roberat_base_trending: str = "bespin-global/klue-sroberta-base-continue-learning-by-mnr"
+    t5_gtr_base: str = "sentence-transformers/gtr-t5-base"
+    sroberta: str = "jhgan/ko-sroberta-multitask"
+    roberta_base_trending: str = "bespin-global/klue-sroberta-base-continue-learning-by-mnr"
 
     def __init__(self, model_name, num_labels:int = 1):
         self._model_name = model_name
@@ -55,7 +56,7 @@ class PlmObject:
 class Model(pl.LightningModule):
     def __init__(self, model_name: str, lr: int, loss_func: Callable, mode: str ='regression'):
         super().__init__()
-        self.save_hyperparameters(ignore=['loss_func'])
+        self.save_hyperparameters()
         self.model_name = model_name
         self.lr = lr
         
@@ -106,12 +107,22 @@ class Model(pl.LightningModule):
         outputs: torch.Tensor = self(input_ids, attention_mask)
         self.log("test_pearson", torchmetrics.functional.pearson_corrcoef(outputs.squeeze(), label.squeeze()))
 
-    def predict_step(self, batch, batch_idx):
+    def predict_step(self, batch, batch_idx: int, dataloader_idx: int = 0):
         input_ids = batch[INPUT_IDS_INDEX]
         attention_mask = batch[ATTENTION_MASK_INDEX]
         
-        outputs: torch.Tensor = self(input_ids, attention_mask)
-        return outputs
+        outputs = self(input_ids, attention_mask)
+        if self.mode == 'classification':
+            pred_class = torch.argmax(outputs, dim=1)
+            predictions = self.class_values[pred_class]
+        else:  # regression mode
+            predictions = outputs
+        
+        # dataloader_idx에 따라 다른 처리를 할 수 있습니다
+        if dataloader_idx == 0:
+            return {"test_predictions": predictions}
+        else:
+            return {"val_predictions": predictions}
 
     def configure_optimizers(self):
         optimizer = torch.optim.AdamW(self.parameters(), lr=self.lr)
