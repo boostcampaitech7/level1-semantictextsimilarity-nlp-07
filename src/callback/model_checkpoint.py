@@ -6,13 +6,15 @@ class ModelCheckpoint(ModelCheckpoint):
         mode='min',
         save_top_k=1,
         save_last=False,
-        model_name = None,
-        filename='best-{model_name}-{epoch:02d}',
+        model_name=None,
         verbose=True,
         dirpath='./checkpoints'
     ):
+        filename = 'best-{epoch:02d}-{val_loss:.2f}'
+        
         if model_name:
             dirpath = f'./{model_name}/checkpoints'
+            filename = f'best-{model_name}-{{epoch:02d}}-{{val_loss:.2f}}'
             
         super().__init__(
             monitor=monitor,
@@ -23,4 +25,4 @@ class ModelCheckpoint(ModelCheckpoint):
             verbose=verbose,
             dirpath=dirpath
         )
-                     
+                    

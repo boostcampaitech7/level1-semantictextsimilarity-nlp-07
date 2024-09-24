@@ -29,15 +29,17 @@ class Models:
     roberta_large: str = "klue/roberta-large"
     t5_base: str = "sentence-transformers/sentence-t5-base"
     t5_gtr_base : str = "sentence-transformers/gtr-t5-base"
+    roberat_base_trending: str = "bespin-global/klue-sroberta-base-continue-learning-by-mnr"
 
-    def __init__(self, model_name):
+    def __init__(self, model_name, num_labels:int = 1):
         self._model_name = model_name
+        self.num_labels = num_labels
         assert self._model_name in asdict(self).values()
     
     @property
     def plm(self):
         return transformers.AutoModelForSequenceClassification.from_pretrained(
-            pretrained_model_name_or_path=self._model_name, num_labels=1)
+            pretrained_model_name_or_path=self._model_name, num_labels=self.num_labels)
 
     def get_model_name(self, name):
         if not hasattr(self, name):
@@ -46,29 +48,33 @@ class Models:
 
 
 class PlmObject:
-    def __init__(self, model_name):
-        self.model = Models(model_name).plm
+    def __init__(self, model_name, num_labels):
+        self.model = Models(model_name, num_labels).plm
 
 
 class Model(pl.LightningModule):
-    def __init__(self, model_name: str, lr: int, loss_func: Callable):
+    def __init__(self, model_name: str, lr: int, loss_func: Callable, mode: str ='regression'):
         super().__init__()
         self.save_hyperparameters(ignore=['loss_func'])
-
         self.model_name = model_name
         self.lr = lr
-
+        
+        self.mode = mode
+        if mode == 'regression':
+            self.num_labels = 1
+            self.loss_func = loss_func
+        elif mode == 'classification':
+            self.num_labels = 31
+            self.loss_func = torch.nn.CrossEntropyLoss()
+        self.class_values = torch.tensor(CLASSIFICATION_VALUES)
+            
         # 사용할 모델을 호출합니다.
-        self.plm = PlmObject(model_name).model
+        self.plm = PlmObject(model_name, self.num_labels).model
         assert self.plm is not None
-
-        # Loss 계산을 위해 사용할 Loss func 사용
-        self.loss_func = loss_func
-        assert self.loss_func is not None
         
     def forward(self, input_data, attention_mask):
         logits = self.plm(input_ids=input_data, attention_mask=attention_mask)['logits']
-        return logits
+        return logits.squeeze()
 
     def training_step(self, batch, batch_idx):
         input_ids = batch[INPUT_IDS_INDEX]
@@ -110,3 +116,6 @@ class Model(pl.LightningModule):
     def configure_optimizers(self):
         optimizer = torch.optim.AdamW(self.parameters(), lr=self.lr)
         return optimizer
+    
+    def _get_class_index(self, label):
+        return torch.argmin(torch.abs(self.class_values.unsqueeze(0) - label.unsqueeze(1)), dim=1)
