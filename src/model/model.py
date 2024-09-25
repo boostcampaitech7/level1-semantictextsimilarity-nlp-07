@@ -28,7 +28,8 @@ class Models:
     'roberta_small': "klue/roberta-small",
     'roberta_large': "klue/roberta-large",
     'synatra7b': "maywell/Synatra-7B-v0.3-dpo",
-    'saltlux': "saltlux/Ko-Llama3-Luxia-8B"}
+    'saltlux': "saltlux/Ko-Llama3-Luxia-8B",
+    'ko-soberta': "jhgan/ko-sroberta-multitask"}
 
     def __init__(self, model_name):
         self._model_name = model_name
