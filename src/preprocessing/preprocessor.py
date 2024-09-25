@@ -6,7 +6,11 @@ def preprocessing(data: pd.DataFrame, model_name: str) -> pd.DataFrame:
     # 안쓰는 컬럼을 삭제합니다.
     data = data.drop(columns=['id'])
     tokenizer = AutoTokenizer.from_pretrained(model_name)
-    
+    if tokenizer.pad_token is None:
+        print('add pad_token...')
+        tokenizer.pad_token = tokenizer.eos_token
+        tokenizer.pad_token_id = tokenizer.eos_token_id
+    print("Padding Token ID:", tokenizer.pad_token_id)
     tokenized_output = data.apply(
         lambda row: tokenizer(row['sentence_1'], row['sentence_2'],
                               add_special_tokens=True, padding='max_length', 
