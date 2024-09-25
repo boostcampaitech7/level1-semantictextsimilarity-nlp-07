@@ -64,14 +64,13 @@ class Model(pl.LightningModule):
         if mode == 'regression':
             self.num_labels = 1
             self.loss_func = loss_func
-        elif mode == 'classification':
-            self.num_labels = 31
-            self.loss_func = torch.nn.CrossEntropyLoss()
-        self.class_values = torch.tensor(CLASSIFICATION_VALUES)
             
         # 사용할 모델을 호출합니다.
         self.plm = PlmObject(model_name, self.num_labels).model
         assert self.plm is not None
+        
+        self.test_predictions = []
+        self.val_predictions = []
         
     def forward(self, input_data, attention_mask):
         logits = self.plm(input_ids=input_data, attention_mask=attention_mask)['logits']
@@ -112,21 +111,12 @@ class Model(pl.LightningModule):
         attention_mask = batch[ATTENTION_MASK_INDEX]
         
         outputs = self(input_ids, attention_mask)
-        if self.mode == 'classification':
-            pred_class = torch.argmax(outputs, dim=1)
-            predictions = self.class_values[pred_class]
-        else:  # regression mode
-            predictions = outputs
-        
-        # dataloader_idx에 따라 다른 처리를 할 수 있습니다
         if dataloader_idx == 0:
-            return {"test_predictions": predictions}
+            return {"test_predictions": outputs}
         else:
-            return {"val_predictions": predictions}
+            return {"val_predictions": outputs}
 
     def configure_optimizers(self):
         optimizer = torch.optim.AdamW(self.parameters(), lr=self.lr)
         return optimizer
     
-    def _get_class_index(self, label):
-        return torch.argmin(torch.abs(self.class_values.unsqueeze(0) - label.unsqueeze(1)), dim=1)

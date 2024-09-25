@@ -6,8 +6,6 @@ from utils.fix_seed import set_seed
 import src.callback as callback
 import pytorch_lightning as pl
 import torch
-import os
-set_seed(0)
 
 # Parameters 선언
 batch_size: int = DATA_LOADER_CONFIG['batch_size']
@@ -18,7 +16,8 @@ num_workers: int = DATA_LOADER_CONFIG.get('num_workers', 4)  # num_workers 기�
 
 if __name__ == "__main__":
     torch.cuda.empty_cache()
-    os.environ["TOKENIZERS_PARALLELISM"] = "false"
+    set_seed(0)
+    $os.environ["TOKENIZERS_PARALLELISM"] = "false"
     model_name = 'electra_base_v3'
     model = Model(Models.electra_base, learning_rate, LossFunctions.mse_loss)
     print('Calling Model is Successful')
@@ -47,21 +46,18 @@ if __name__ == "__main__":
     trainer.fit(model=model, datamodule=dataloader)
     
     print('------'*20)
-    trainer.test(model=model, datamodule=dataloader)
     
     # 가장 좋은 모델 불러오기
     best_model_path = checkpoint_callback.best_model_path
-    model = Model.load_from_checkpoint(
-        best_model_path, 
-        model_name=Models.electra_base_v3,
-        lr=learning_rate,
-        loss_func=LossFunctions.mse_loss
-    )
+    model = Model.load_from_checkpoint(best_model_path)
+    trainer.test(model=model, datamodule=dataloader)
     print('----------'*10, 'Start Prediction', '----------'*10)
     
     # 추론
     predictions = trainer.predict(model=model, datamodule=dataloader)
+    test_predictions, val_predictions = predictions[0], predictions[1]
 
     # 결과 저장
-    save_result(predictions, model_name, max_epoch)
+    save_result(test_predictions, model_name, max_epoch, mode='output')
+    save_result(val_predictions, model_name, max_epoch, mode='train')
     print('----------'*10, 'Finish', '----------'*10)
