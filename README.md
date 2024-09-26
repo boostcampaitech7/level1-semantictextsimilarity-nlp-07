@@ -17,7 +17,7 @@
 
 | 강감찬 | 이채호 | 오승범 | 이서현 | 유채은 | 서재덕 |
 | :-: | :-: | :-: | :-: | :-: | :-: |
-||![꼬부기2](./docs/image/README/꼬부기3.png)|![꼬부기2](./docs/image/README/꼬부기3.png)||||
+||![꼬부기2](./docs/image/README/꼬부기2.png)|![꼬부기3](./docs/image/README/꼬부기3.png)||||
 |[@감찬](https://github.com/gsgh3016)|[@채호](https://github.com/chell9999)|[@승범](https://github.com/Sbeom12)|[@서현](https://github.com/seohyeon0677)|[@채은](https://github.com/canolayoo78)|[@재덕](https://github.com/jduck301)|
 |고독한 음악인|혼자있는 지방러|게임이 하고 싶은 승범|서현 막내|야구가 싫은 채은|재덕=? 오리|
 
