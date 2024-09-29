@@ -6,7 +6,7 @@ DATA_LOADER_CONFIG = {
   "dev_path" : './data/dev_after_hanspell.csv',
   "test_path" : './data/dev_after_hanspell.csv',
   "predict_path" : './data/test_after_hanspell.csv',
-  "output_path" : './data/sample_submission.csv'
+  "output_path" : './data/sample_submission.csv'  
 }
 
 OPTIMIZER_CONFIG = {
