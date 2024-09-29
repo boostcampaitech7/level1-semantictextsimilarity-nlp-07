@@ -16,8 +16,9 @@ num_workers: int = DATA_LOADER_CONFIG.get('num_workers', 4)  # num_workers 기�
 
 if __name__ == "__main__":
     torch.cuda.empty_cache()
+    # 시드 고정
     set_seed(0)
-    #os.environ["TOKENIZERS_PARALLELISM"] = "false"
+    # 모델 선언
     model_name = 'electra_base_v3'
     model = Model(Models.electra_base, learning_rate, LossFunctions.mse_loss)
     print('Calling Model is Successful')
