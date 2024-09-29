@@ -11,82 +11,113 @@
 * `피어슨 상관계수`를 통한 평가.
 
 ## 📆세부일정
+
 * 프로젝트 기간(2주) : 09.10(화) ~ 09.26(목)
 
 ## 😁팀소개
 
-| 강감찬 | 이채호 | 오승범 | 이서현 | 유채은 | 서재덕 |
-| :-: | :-: | :-: | :-: | :-: | :-: |
-||![꼬부기2](./docs/image/README/꼬부기2.png)|![꼬부기3](./docs/image/README/꼬부기3.png)||||
-|[@감찬](https://github.com/gsgh3016)|[@채호](https://github.com/chell9999)|[@승범](https://github.com/Sbeom12)|[@서현](https://github.com/seohyeon0677)|[@채은](https://github.com/canolayoo78)|[@재덕](https://github.com/jduck301)|
-|고독한 음악인|혼자있는 지방러|게임이 하고 싶은 승범|서현 막내|야구가 싫은 채은|재덕=? 오리|
+<table style="width: 100%; text-align: center;">
+  <tr>
+    <th>강감찬</th>
+    <th>이채호</th>
+    <th>오승범</th>
+    <th>이서현</th>
+    <th>유채은</th>
+    <th>서재덕</th>
+  </tr>
+  <tr>
+    <td><img src="./docs/image/README/꼬부기1.png" alt="꼬부기1" width="100" height="100"></td>
+    <td><img src="./docs/image/README/꼬부기2.png" alt="꼬부기2" width="100" height="100"></td>
+    <td><img src="./docs/image/README/꼬부기3.png" alt="꼬부기3" width="100" height="100"></td>
+    <td><img src="./docs/image/README/꼬부기4.png" alt="꼬부기4" width="100" height="100"></td>
+    <td><img src="./docs/image/README/꼬부기5.png" alt="꼬부기5" width="100" height="100"></td>
+    <td><img src="./docs/image/README/꼬부기6.png" alt="꼬부기6" width="100" height="100"></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/gsgh3016">@감찬</a></td>
+    <td><a href="https://github.com/chell9999">@채호</a></td>
+    <td><a href="https://github.com/Sbeom12">@승범</a></td>
+    <td><a href="https://github.com/seohyeon0677">@서현</a></td>
+    <td><a href="https://github.com/canolayoo78">@채은</a></td>
+    <td><a href="https://github.com/jduck301">@재덕</a></td>
+  </tr>
+  <tr>
+    <td>고독한 음악인 감찬</td>
+    <td>혼자있는 지방러 채호</td>
+    <td>게임이 하고 싶은 승범</td>
+    <td>귀엽둥이 막내 서현</td>
+    <td>야구가 싫은 채은</td>
+    <td>오리는 꽥꽥 재덕</td>
+  </tr>
+</table>
 
 ## 프로젝트 수행 절차 및 방법
-🔄 프로젝트 순환 프로세스: 가설 ➡️ 실험 ➡️ 검증  
-1. 🔍 데이터 EDA (탐색적 데이터 분석)  
-   * 데이터 분포 확인  
-   * 이상치 및 결측치 탐지  
+
+🔄 프로젝트 순환 프로세스: 가설 ➡️ 실험 ➡️ 검증
+
+1. 🔍 데이터 EDA (탐색적 데이터 분석)
+
+   * 데이터 분포 확인
+   * 이상치 및 결측치 탐지
    * 특성 간 상관관계 분석
-       
 2. 🔬 데이터 증강
+
    * 텍스트 변형 기법 적용(RTT)
    * 동의어/유의어 치환
    * KoEDA
-     
-4. 🤖 모델 
+3. 🤖 모델
+
    * SOTA 모델 비교 분석
    * 태스크 특화 모델 탐색
    * 앙상블 기법 고려
-     
-5. ⚙️ 하이퍼파리마터 튜닝
+4. ⚙️ 하이퍼파리마터 튜닝
+
    * Optuna 실험
    * learning rate 조절
-     
 
 ## 프로젝트 아키텍쳐
 
 ## 프로젝트 폴더 구조
-📦level1-semantictextsimilarity-nlp-07  
- ┣ 📂docs  
- ┃ ┗ 📂image  
- ┃ ┃ ┗ 📂README  
- ┃ ┃ ┃ ┗ 📜1726648039867.png  
- ┣ 📂logger  
- ┃ ┗ 📜__init__.py  
- ┣ 📂saved  
- ┃ ┗ 📜log  
- ┣ 📂src  
- ┃ ┣ 📂callback  
- ┃ ┃ ┣ 📜early_stopping.py  
- ┃ ┃ ┣ 📜epoch_print_callback.py  
- ┃ ┃ ┣ 📜learning_rate_monitor.py  
- ┃ ┃ ┣ 📜model_checkpoint.py  
- ┃ ┃ ┗ 📜__init__.py  
- ┃ ┣ 📂config  
- ┃ ┃ ┣ 📜data_loader_config.py  
- ┃ ┃ ┗ 📜path_config.py  
- ┃ ┣ 📂data_loader  
- ┃ ┃ ┣ 📜dataset.py  
- ┃ ┃ ┗ 📜loader.py  
- ┃ ┣ 📂model  
- ┃ ┃ ┗ 📜model.py  
- ┃ ┣ 📂preprocessing  
- ┃ ┃ ┗ 📜preprocessor.py  
- ┃ ┣ 📂tokenizing  
- ┃ ┃ ┗ 📜tokenizing.py  
- ┃ ┗ 📂trainer  
- ┃ ┃ ┗ 📜predict.py  
- ┣ 📜main.py  
- ┣ 📜README.md  
- ┣ 📜requirements.txt  
- ┣ 📜test.py  
- ┗ 📜train.py  
+
+📦level1-semantictextsimilarity-nlp-07
+ ┣ 📂docs
+ ┃ ┗ 📂image
+ ┃ ┃ ┗ 📂README
+ ┃ ┃ ┃ ┗ 📜1726648039867.png
+ ┣ 📂logger
+ ┃ ┗ 📜__init__.py
+ ┣ 📂saved
+ ┃ ┗ 📜log
+ ┣ 📂src
+ ┃ ┣ 📂callback
+ ┃ ┃ ┣ 📜early_stopping.py
+ ┃ ┃ ┣ 📜epoch_print_callback.py
+ ┃ ┃ ┣ 📜learning_rate_monitor.py
+ ┃ ┃ ┣ 📜model_checkpoint.py
+ ┃ ┃ ┗ 📜__init__.py
+ ┃ ┣ 📂config
+ ┃ ┃ ┣ 📜data_loader_config.py
+ ┃ ┃ ┗ 📜path_config.py
+ ┃ ┣ 📂data_loader
+ ┃ ┃ ┣ 📜dataset.py
+ ┃ ┃ ┗ 📜loader.py
+ ┃ ┣ 📂model
+ ┃ ┃ ┗ 📜model.py
+ ┃ ┣ 📂preprocessing
+ ┃ ┃ ┗ 📜preprocessor.py
+ ┃ ┣ 📂tokenizing
+ ┃ ┃ ┗ 📜tokenizing.py
+ ┃ ┗ 📂trainer
+ ┃ ┃ ┗ 📜predict.py
+ ┣ 📜main.py
+ ┣ 📜README.md
+ ┣ 📜requirements.txt
+ ┣ 📜test.py
+ ┗ 📜train.py
 
 ## Appendix
 
 ### 협업방식
 
 * Notion
-* Git  
-
-### 
+* Git
