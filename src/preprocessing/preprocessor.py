@@ -5,7 +5,7 @@ from transformers import AutoTokenizer
 def preprocessing(data: pd.DataFrame, model_name: str) -> pd.DataFrame:
     # 안쓰는 컬럼을 삭제합니다.
     data = data.drop(columns=['id'])
-    tokenizer = AutoTokenizer.from_pretrained(model_name)
+    tokenizer = AutoTokenizer.from_pretrained(model_name, clean_up_tokenization_spaces=True)
     
     tokenized_output = data.apply(
         lambda row: tokenizer(row['sentence_1'], row['sentence_2'],

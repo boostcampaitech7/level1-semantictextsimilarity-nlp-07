@@ -4,9 +4,10 @@ import torch
 import torchmetrics
 from dataclasses import dataclass, asdict
 from typing import Callable
+from torch.optim.lr_scheduler import CosineAnnealingLR
 # from utils.similarity import *
 from src.config.data_loader_config import *
-import pandas as pd
+
 
 
 INPUT_IDS_INDEX = TRAIN_INPUT_FEATURES.index('input_ids')
@@ -54,11 +55,13 @@ class PlmObject:
 
 
 class Model(pl.LightningModule):
-    def __init__(self, model_name: str, lr: int, loss_func: Callable, mode: str ='regression'):
+    def __init__(self, model_name: str, lr: float, loss_func: Callable, mode: str ='regression', max_epochs: int = 5, min_lr: float = 1e-6):
         super().__init__()
         self.save_hyperparameters()
         self.model_name = model_name
         self.lr = lr
+        self.max_epochs = max_epochs
+        self.min_lr = min_lr
         
         self.mode = mode
         if mode == 'regression':
@@ -93,6 +96,8 @@ class Model(pl.LightningModule):
         
         outputs: torch.Tensor = self(input_ids, attention_mask)
         loss: torch.Tensor = self.loss_func(outputs, label)
+        outputs = outputs.float()
+        label = label.float()
         val_pearson: torch.Tensor = torchmetrics.functional.pearson_corrcoef(outputs.squeeze(), label.squeeze())
         self.log("val_loss", loss)
         self.log("val_pearson", val_pearson)
@@ -104,7 +109,9 @@ class Model(pl.LightningModule):
         label = batch[LABEL_INDEX]
         
         outputs: torch.Tensor = self(input_ids, attention_mask)
+        loss: torch.Tensor = self.loss_func(outputs, label)
         self.log("test_pearson", torchmetrics.functional.pearson_corrcoef(outputs.squeeze(), label.squeeze()))
+        self.log("val_loss", loss)
 
     def predict_step(self, batch, batch_idx: int, dataloader_idx: int = 0):
         input_ids = batch[INPUT_IDS_INDEX]
@@ -118,5 +125,13 @@ class Model(pl.LightningModule):
 
     def configure_optimizers(self):
         optimizer = torch.optim.AdamW(self.parameters(), lr=self.lr)
-        return optimizer
+        scheduler = CosineAnnealingLR(optimizer, T_max=self.max_epochs, eta_min=self.min_lr) # 1e-6
+        return {
+            "optimizer": optimizer,
+            "lr_scheduler": {
+                "scheduler": scheduler,
+                "interval": "epoch",
+                "frequency": 1
+            }
+        }
     
