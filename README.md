@@ -84,8 +84,19 @@
 
 ## 프로젝트 아키텍쳐
 
+<img src= './docs/image/README/project_architecture.png' height = '250'>  
+
+* 사용 모델 학습 결과
+
+|사용모델|데이터 증강|source별|public|private|
+|:-:|:-:|:-:|:-:|:-:|
+|monologg/koelectra-base-v3-discriminator|x|x|0.9170|0.9249|
+|klue/roberta-large|x|x|0.9175|0.9277|
+|monologg/koelectra-base-v3-discriminator|x|o|0.9124|0.9288|
+|monologg/koelectra-base-v3-discriminator|o|x|0.8909|0.9030|
 
 ## 프로젝트 결과
+
 ||public|private|
 |:-:|:-:|:-:|
 |pearson 점수|0.9281|0.9360|
@@ -103,6 +114,34 @@ python3 main.py
 ```
 
 ## Appendix
+
+### Model Development
+
+* 소수점처리
+  * pearson 계산하기 전 output 추론 결과에 대해 소수점 둘째자리에서 반올림하지 않고 나머지 값들을 쓰면 점수가 향상됨.
+
+|koelectra|반올림|반올림 안함|
+|:-:|:-:|:-:|
+|public|0.9167|0.9170|
+|private|0.9245|0.9249|
+
+* Optuna
+  * Optuna를 활용하여 적절한 learning rate에 대한 탐색
+
+| 모델 | Optuna 전 | Optuna 후 |
+| --- | --- | --- |
+| Roberta_large | 0.9171 | 0.9322 |
+| koelectra | 0.8775 | 0.9254 |
+
+### loss func 고찰
+
+* 시드를 고정 후 아래의 Loss Function(`hu`, `L1`, `MSE`)으로 학습한 결과 `MSE loss`가 가장 뛰어난 성능을 보여 `MSE Loss`를 채택. 
+
+| 모델 | 사용한 함수 | pearson 점수 |
+| --- | --- | --- |
+| koelectra | hu_loss | 0.9192 |
+| koelectra | L1_loss | 0.9018 |
+| koelectra | mse_loss | 0.9241 |
 
 ### 프로젝트 폴더 구조
 
