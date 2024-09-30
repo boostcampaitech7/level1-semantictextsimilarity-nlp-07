@@ -1,0 +1,13 @@
+data/
+*.pt
+lightning_logs
+*.csv
+.env
+result*
+checkpoint*
+*nsmc*
+*petition*
+*slack*
+*__pycache__*
+*.pyc
+project1_virtual/
