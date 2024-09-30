@@ -143,6 +143,16 @@ python3 main.py
 | koelectra | L1_loss | 0.9018 |
 | koelectra | mse_loss | 0.9241 |
 
+### Ensemble
+
+* 최대한 다른 모델들로 구성하여 `soft voting`으로 결과를 추론하여 성능을 올릴 수 있었다.
+* Ensemble에 사용된 모델들은 `RoBERTa large`, `koELECTRA`, `Source`별로 학습한 `koELECTRA`, 데이터 3만개로 증강한 `koELECTRA`이다.
+* 이를 통해 더 높은 점수를 얻을 수 있었다.
+
+||Ensemble 전|Ensemble 후|
+|:-:|:-:|:-:|
+|pearson 점수|0.9175|0.9360|
+
 ### 프로젝트 폴더 구조
 
 📦level1-semantictextsimilarity-nlp-07  
