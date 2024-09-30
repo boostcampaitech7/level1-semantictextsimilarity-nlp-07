@@ -118,7 +118,7 @@ python3 main.py
 ### Model Development
 
 * 소수점처리
-  * pearson 계산하기 전 output 추론 결과에 대해 소수점 둘째자리에서 반올림하지 않고 나머지 값들을 쓰면 점수가 향상됨.
+  * Pearson 상관 계수 계산 시 출력값의 소수점을 반올림하지 않고 모든 자릿수를 유지하면 성능 점수가 향상된다.
 
 |koelectra|반올림|반올림 안함|
 |:-:|:-:|:-:|
@@ -126,7 +126,7 @@ python3 main.py
 |private|0.9245|0.9249|
 
 * Optuna
-  * Optuna를 활용하여 적절한 learning rate에 대한 탐색
+  * Optuna를 활용하여 적절한 learning rate에 대한 탐색 후 학습.
 
 | 모델 | Optuna 전 | Optuna 후 |
 | --- | --- | --- |
@@ -135,7 +135,7 @@ python3 main.py
 
 ### loss func 고찰
 
-* 시드를 고정 후 아래의 Loss Function(`hu`, `L1`, `MSE`)으로 학습한 결과 `MSE loss`가 가장 뛰어난 성능을 보여 `MSE Loss`를 채택. 
+* 시드를 고정 후 아래의 Loss Function(`hu`, `L1`, `MSE`)으로 학습한 결과 `MSE loss`가 가장 뛰어난 성능을 보여 `MSE Loss`를 채택.
 
 | 모델 | 사용한 함수 | pearson 점수 |
 | --- | --- | --- |
